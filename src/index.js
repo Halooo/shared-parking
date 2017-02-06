@@ -13,12 +13,15 @@
 //   </Provider>,
 //   document.getElementById('root')
 // );
-import React from "react"
-import ReactDOM from "react-dom"
-import { Provider } from "react-redux"
+import React from "react";
+import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import injectTapEventPlugin from "react-tap-event-plugin";
 
-import App from "./App"
-import store from "./store/configure-store"
+injectTapEventPlugin();
+
+import App from "./App";
+import store from "./store/configure-store";
 
 const app = document.getElementById('root')
 

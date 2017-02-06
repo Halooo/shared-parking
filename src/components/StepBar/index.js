@@ -1,10 +1,10 @@
 /**
  * Created by haos on 30/01/2017.
  */
-import React from "react"
-import { connect } from "react-redux"
+import React from "react";
+import { connect } from "react-redux";
 
-import stepConfig from "../ButtonGroup/step.config"
+import stepConfig from "../ButtonGroup/step.config";
 
 @connect((store) => {
     return {

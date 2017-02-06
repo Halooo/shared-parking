@@ -3,16 +3,25 @@
  */
 import React from "react"
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import 'antd/dist/antd.css';
 
-import Layout from "./components/Layout"
+import Layout from "./components/Layout";
+import Login from "./components/Login";
+import { connect } from "react-redux";
+
+@connect((store) => {
+    return {
+        store,
+        loggedIn: store.login.loggedIn
+    }
+})
 
 export default class App extends React.Component {
     render() {
         return (
             <MuiThemeProvider>
-                <div>
-                    <Layout />
-                </div>
+                {/*{this.props.loggedIn ? <Layout/> : <Login/>}*/}
+                <Layout/>
             </MuiThemeProvider>
         )
     }

@@ -11,11 +11,23 @@ export default function reducer(state={
     // fetching: false,
     // fetched: false,
     // error: null,
-    loggedIn: false
+    loggedIn: false,
+    signUp: false,
 }, action) {
     switch (action.type) {
         case "LOGIN_SUCCESS": {
-            return {...state, loggedIn: true}
+            return {
+                ...state,
+                fetching: false,
+                fetched: true,
+                loggedIn: true
+            }
+        }
+        case "START_SIGNUP": {
+            return {...state, signUp: true}
+        }
+        case "FINISH_SIGNUP": {
+            return {...state, signUp: false}
         }
     }
     return state

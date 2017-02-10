@@ -11,7 +11,7 @@ import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
-import { login } from "../../actions/loginActions";
+import { login, startSignUp } from "../../actions/loginActions";
 const FormItem = Form.Item;
 
 import SignUp from "../SignUp";
@@ -30,6 +30,7 @@ export default class Login extends React.Component {
         this.state = {
             signUp: false,
             email: '',
+            pwAvatar:'',
             pw: '',
         };
     }
@@ -42,11 +43,16 @@ export default class Login extends React.Component {
         //         this.props.dispatch(login());
         //     }
         // });
-        this.props.dispatch(login(this.state.email, this.state.pw));
-
+        this.props.dispatch(login({
+            data: {
+                email: this.state.email,
+                pw: this.state.pw
+            }
+        }));
     }
     signUp() {
         this.setState({signUp: true});
+        this.props.dispatch(startSignUp())
     }
 
     handleEmailChange(e) {
@@ -69,8 +75,7 @@ export default class Login extends React.Component {
             marginRight: '-50%',
             transform: 'translate(-50%, -50%)',
         };
-
-        if(this.state.signUp) {
+        if(this.props.store.login.signUp) {
             return <SignUp />
         }
         else {

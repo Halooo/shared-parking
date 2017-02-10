@@ -13,6 +13,8 @@ import TextField from "material-ui/TextField";
 import { Form } from "antd";
 const FormItem = Form.Item;
 
+import { createPass } from "../../actions/createAction";
+
 @connect((store) => {
     return {
         stepData: store.steps
@@ -25,9 +27,16 @@ export default class CreatePass extends React.Component {
         let date = new Date();
         this.state = {
             defaultDate: date,
+            time: null,
             location: '',
             sharedFare: '',
         };
+    }
+    handleDate(e,date) {
+        this.setState({defaultDate: date})
+    }
+    handleTime(e,time) {
+        this.setState({time: time})
     }
     handleLocationChange(e) {
         this.setState({
@@ -42,7 +51,14 @@ export default class CreatePass extends React.Component {
     }
 
     handleCreate(e) {
-
+        this.props.dispatch(createPass({
+            data: {
+                date: this.state.defaultDate,
+                time: this.state.time,
+                location: this.state.location,
+                sharedFare: this.state.sharedFare
+            }
+        }));
     }
     render() {
         const BASE_STYLE = {
@@ -61,13 +77,14 @@ export default class CreatePass extends React.Component {
                         <FormItem>
                             <p>Pick a Day</p>
                             <DatePicker
+                                onChange={this.handleDate.bind(this)}
                                 hintText="Pick Date"
                                 defaultDate={this.state.defaultDate}
                             />
                         </FormItem>
                         <FormItem>
                             <p>Select Time to Meet</p>
-                            <TimePicker hintText="Pick Time" />
+                            <TimePicker onChange={this.handleTime.bind(this)} hintText="Pick Time" />
                         </FormItem>
                         <FormItem>
                             <TextField
@@ -85,7 +102,7 @@ export default class CreatePass extends React.Component {
                                 onChange={this.handleSharedFareChange.bind(this)}
                             />
                         </FormItem>
-                        <FormItem style={{float: 'right'}}>
+                        <FormItem >
                             <RaisedButton label="Create" primary={true} onClick={this.handleCreate.bind(this)}  />
                         </FormItem>
 

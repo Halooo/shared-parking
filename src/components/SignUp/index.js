@@ -6,10 +6,11 @@ import { connect } from "react-redux";
 
 import RaisedButton from "material-ui/RaisedButton"
 import TextField from "material-ui/TextField";
-import { Form } from "antd";
+import { Form, message } from "antd";
 const FormItem = Form.Item;
 
 import { signUp } from "../../actions/signUpAction"
+import { finishSignUp } from "../../actions/loginActions"
 
 @connect((store) => {
     return {
@@ -29,6 +30,8 @@ export default class CreatePass extends React.Component {
             phone: '',
             fb: '',
             wechat: '',
+            pw: '',
+            pwRe: '',
         };
     }
     handleFirstChange(e) {
@@ -61,6 +64,16 @@ export default class CreatePass extends React.Component {
             fb: e.target.value,
         });
     }
+    handlePwChange(e) {
+        this.setState({
+            pw: e.target.value,
+        });
+    }
+    handlePwRepeatChange(e) {
+        this.setState({
+            pwRe: e.target.value,
+        });
+    }
 
     handleSignUp(e) {
         const singUpInfo = {
@@ -70,20 +83,24 @@ export default class CreatePass extends React.Component {
             phone: this.state.phone,
             fb: this.state.fb,
             wechat: this.state.wechat,
+            pw: this.state.pw,
+            pwRe: this.state.pwRe
         };
         this.props.dispatch(signUp(singUpInfo));
+        let err = this.props.store.signup.validationErr;
+        if(err) {
+            message.error(err, 8)
+        }
     }
     render() {
         const BASE_STYLE = {
             position: 'relative',
             background: '#f2f2f2'
-            // top: '50%',
-            // left: '50%',
-            // marginRight: '-50%',
-            // transform: 'translate(-50%, -50%)',
         };
+        if (this.props.store.signup.signedUp) {
+            this.props.dispatch(finishSignUp());
+        }
         return (
-
             <div style={{maxWidth: '400px'}}>
                 <div style={BASE_STYLE}>
                     <h1 style={{textAlign: 'left', fontWeight: '200'}}>Sign Up</h1>
@@ -160,6 +177,22 @@ export default class CreatePass extends React.Component {
                                 onChange={this.handleFbChange.bind(this)}
                             />
                         </FormItem>
+                        <FormItem>
+                            <TextField
+                                hintText="Password"
+                                floatingLabelText="Password"
+                                value={this.state.pw}
+                                onChange={this.handlePwChange.bind(this)}
+                            />
+                        </FormItem>
+                        <FormItem>
+                            <TextField
+                                hintText="Password"
+                                floatingLabelText="Repeat Password"
+                                value={this.state.pwRe}
+                                onChange={this.handlePwRepeatChange.bind(this)}
+                            />
+                        </FormItem>
                         <FormItem style={{float: 'right'}}>
                             <RaisedButton label="Sign Up" primary={true} onClick={this.handleSignUp.bind(this)} />
                         </FormItem>
@@ -167,5 +200,7 @@ export default class CreatePass extends React.Component {
                 </div>
             </div>
         )
+
+
     }
 }

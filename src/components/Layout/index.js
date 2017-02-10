@@ -71,14 +71,12 @@ export default class Base extends React.Component {
                 <Menu.Item key="account" style={{float: 'right'}}><Icon type="logout" />Logout</Menu.Item>
             </Menu>
         }
-
-
         return (
             <Layout className="layout" style={{height: '100%', background: '#f2f2f2' }}>
                 <Header style={{padding: '0', height: '48px'}}>
                     {responsiveMenu}
                 </Header>
-                <Content style={{ margin: 'auto', padding: '0px', flex: 'none'}}>
+                <Content style={{ margin: '0 0 auto 0', padding: '0px', flex: 'none'}}>
                     {tabContent}
                 </Content>
                 <Footer style={{ textAlign: 'center', color: '#ddd' }}>

@@ -17,6 +17,7 @@ import { createPass } from "../../actions/createAction";
 
 @connect((store) => {
     return {
+        store,
         stepData: store.steps
     }
 })
@@ -56,7 +57,8 @@ export default class CreatePass extends React.Component {
                 date: this.state.defaultDate,
                 time: this.state.time,
                 location: this.state.location,
-                sharedFare: this.state.sharedFare
+                sharedFare: this.state.sharedFare,
+                email: this.props.store.login.email,
             }
         }));
     }

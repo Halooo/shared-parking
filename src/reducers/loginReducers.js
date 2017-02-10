@@ -13,6 +13,7 @@ export default function reducer(state={
     // error: null,
     loggedIn: false,
     signUp: false,
+    email: '',
 }, action) {
     switch (action.type) {
         case "LOGIN_SUCCESS": {
@@ -20,7 +21,8 @@ export default function reducer(state={
                 ...state,
                 fetching: false,
                 fetched: true,
-                loggedIn: true
+                loggedIn: true,
+                email: action.email,
             }
         }
         case "START_SIGNUP": {

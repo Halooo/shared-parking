@@ -19,7 +19,7 @@ import { connect } from "react-redux";
 
 export default class App extends React.Component {
     render() {
-        // console.log(1)
+        console.log(1)
         return (
             <MuiThemeProvider>
                 {this.props.loggedIn ? <Layout/> : <Login/>}

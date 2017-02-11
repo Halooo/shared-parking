@@ -8,11 +8,14 @@ import React from "react";
 import { connect } from "react-redux";
 
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
-const FormItem = Form.Item;
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import { login } from "../../actions/loginActions"
+import FlatButton from 'material-ui/FlatButton';
+import { login, startSignUp } from "../../actions/loginActions";
+import { listAll } from "../../actions/listActions"
+const FormItem = Form.Item;
 
+import SignUp from "../SignUp";
 
 @connect((store) => {
     return {
@@ -26,7 +29,9 @@ export default class Login extends React.Component {
         super(props);
 
         this.state = {
+            signUp: false,
             email: '',
+            pwAvatar:'',
             pw: '',
         };
     }
@@ -39,8 +44,16 @@ export default class Login extends React.Component {
         //         this.props.dispatch(login());
         //     }
         // });
-        this.props.dispatch(login(this.state.email, this.state.pw));
-
+        this.props.dispatch(login({
+            data: {
+                email: this.state.email,
+                pw: this.state.pw
+            }
+        }));
+    }
+    signUp() {
+        this.setState({signUp: true});
+        this.props.dispatch(startSignUp())
     }
 
     handleEmailChange(e) {
@@ -55,6 +68,9 @@ export default class Login extends React.Component {
         });
     }
 
+    componentDidMount() {
+        this.props.dispatch(listAll());
+    }
     render() {
         const LOGIN_BASE_STYLE = {
             position: 'absolute',
@@ -63,34 +79,37 @@ export default class Login extends React.Component {
             marginRight: '-50%',
             transform: 'translate(-50%, -50%)',
         };
-
-        return (
-            <div style={{positon:'relative'}}>
-                <Form style={LOGIN_BASE_STYLE}>
-                    <FormItem>
-                        <TextField
-                            hintText="Enter Email"
-                            floatingLabelText="Email"
-                            value={this.state.email}
-                            onChange={this.handleEmailChange.bind(this)}
-                        />
-                    </FormItem>
-                    <FormItem>
-                        <TextField
-                            hintText="Enter Password"
-                            floatingLabelText="Password"
-                            value={this.state.pw}
-                            onChange={this.handlePwChange.bind(this)}
-                        />
-                    </FormItem>
-                    <FormItem>
-                        <RaisedButton label="Login" primary={true} onClick={this.handleLogin.bind(this)}  />
-                    </FormItem>
-
-                </Form>
-            </div>
-        )
-
+        if(this.props.store.login.signUp) {
+            return <SignUp />
+        }
+        else {
+            return (
+                <div style={{positon:'relative'}}>
+                    <Form style={LOGIN_BASE_STYLE}>
+                        <FormItem>
+                            <TextField
+                                hintText="Enter Email"
+                                floatingLabelText="Email"
+                                value={this.state.email}
+                                onChange={this.handleEmailChange.bind(this)}
+                            />
+                        </FormItem>
+                        <FormItem>
+                            <TextField
+                                hintText="Enter Password"
+                                floatingLabelText="Password"
+                                value={this.state.pw}
+                                onChange={this.handlePwChange.bind(this)}
+                            />
+                        </FormItem>
+                        <FormItem>
+                            <FlatButton label="Sign Up" onClick={this.signUp.bind(this)}/>
+                            <RaisedButton label="Login" primary={true} onClick={this.handleLogin.bind(this)} />
+                        </FormItem>
+                    </Form>
+                </div>
+            )
+        }
     }
 
 }

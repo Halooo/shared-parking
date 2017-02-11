@@ -13,8 +13,12 @@ import TextField from "material-ui/TextField";
 import { Form } from "antd";
 const FormItem = Form.Item;
 
+import { createPass } from "../../actions/createAction";
+import { listAll } from "../../actions/listActions"
+
 @connect((store) => {
     return {
+        store,
         stepData: store.steps
     }
 })
@@ -25,9 +29,19 @@ export default class CreatePass extends React.Component {
         let date = new Date();
         this.state = {
             defaultDate: date,
+            time: null,
             location: '',
             sharedFare: '',
         };
+    }
+    componentDidUpdate() {
+        this.props.dispatch(listAll());
+    }
+    handleDate(e,date) {
+        this.setState({defaultDate: date})
+    }
+    handleTime(e,time) {
+        this.setState({time: time})
     }
     handleLocationChange(e) {
         this.setState({
@@ -42,7 +56,15 @@ export default class CreatePass extends React.Component {
     }
 
     handleCreate(e) {
-
+        this.props.dispatch(createPass({
+            data: {
+                date: this.state.defaultDate,
+                time: this.state.time,
+                location: this.state.location,
+                sharedFare: this.state.sharedFare,
+                email: this.props.store.login.email,
+            }
+        }));
     }
     render() {
         const BASE_STYLE = {
@@ -54,42 +76,43 @@ export default class CreatePass extends React.Component {
             // transform: 'translate(-50%, -50%)',
         };
         return (
-            <div style={BASE_STYLE}>
-                <h1 style={{textAlign: 'left', fontWeight: '200'}}>Share My Pass</h1>
-                <Form style={{paddingTop: '20px'}}>
-                    <FormItem>
-                        <p>Pick a Day</p>
-                        <DatePicker
-                            hintText="Pick Date"
-                            defaultDate={this.state.defaultDate}
-                        />
-                    </FormItem>
-                    <FormItem>
-                        <p>Select Time to Meet</p>
-                        <TimePicker hintText="Pick Time" />
-                    </FormItem>
-                    <FormItem>
-                        <TextField
-                            hintText='Suggested Format: "lot M"'
-                            floatingLabelText="Location"
-                            value={this.state.location}
-                            onChange={this.handleLocationChange.bind(this)}
-                        />
-                    </FormItem>
-                    <FormItem>
-                        <TextField
-                            hintText="Enter Fare They Will Pay"
-                            floatingLabelText="Price"
-                            value={this.state.sharedFare}
-                            onChange={this.handleSharedFareChange.bind(this)}
-                        />
-                    </FormItem>
-                    <FormItem style={{float: 'right'}}>
-                        <RaisedButton label="Create" primary={true} onClick={this.handleCreate.bind(this)}  />
-                    </FormItem>
-
-                </Form>
-
+            <div style={{maxWidth: '400px'}}>
+                <div style={BASE_STYLE}>
+                    <h1 style={{textAlign: 'left', fontWeight: '200'}}>Share My Pass</h1>
+                    <Form style={{paddingTop: '20px'}}>
+                        <FormItem>
+                            <p>Pick a Day</p>
+                            <DatePicker
+                                onChange={this.handleDate.bind(this)}
+                                hintText="Pick Date"
+                                defaultDate={this.state.defaultDate}
+                            />
+                        </FormItem>
+                        <FormItem>
+                            <p>Select Time to Meet</p>
+                            <TimePicker onChange={this.handleTime.bind(this)} hintText="Pick Time" />
+                        </FormItem>
+                        <FormItem>
+                            <TextField
+                                hintText='Suggested Format: "lot M"'
+                                floatingLabelText="Location"
+                                value={this.state.location}
+                                onChange={this.handleLocationChange.bind(this)}
+                            />
+                        </FormItem>
+                        <FormItem>
+                            <TextField
+                                hintText="Enter Fare They Will Pay"
+                                floatingLabelText="Price"
+                                value={this.state.sharedFare}
+                                onChange={this.handleSharedFareChange.bind(this)}
+                            />
+                        </FormItem>
+                        <FormItem >
+                            <RaisedButton label="Create" primary={true} onClick={this.handleCreate.bind(this)}  />
+                        </FormItem>
+                    </Form>
+                </div>
             </div>
         )
     }

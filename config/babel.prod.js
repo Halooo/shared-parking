@@ -6,7 +6,8 @@ module.exports = {
         'babel-preset-react'
     ].map(require.resolve),
     plugins: [
-        'transform-decorators-legacy',
+        'babel-plugin-transform-async-to-generator',
+        'babel-plugin-transform-decorators-legacy',
         'babel-plugin-syntax-trailing-function-commas',
         'babel-plugin-transform-class-properties',
         'babel-plugin-transform-object-rest-spread',

@@ -7,6 +7,7 @@ import 'antd/dist/antd.css';
 
 import Layout from "./components/Layout";
 import Login from "./components/Login";
+
 import { connect } from "react-redux";
 
 @connect((store) => {
@@ -18,10 +19,11 @@ import { connect } from "react-redux";
 
 export default class App extends React.Component {
     render() {
+        console.log(1)
         return (
             <MuiThemeProvider>
-                {/*{this.props.loggedIn ? <Layout/> : <Login/>}*/}
-                <Layout/>
+                {this.props.loggedIn ? <Layout/> : <Login/>}
+                {/*<Layout/>*/}
             </MuiThemeProvider>
         )
     }

@@ -1,9 +1,6 @@
 /**
  * Created by hsun on 2017-02-04.
  */
-/**
- * Created by haos on 27/01/2017.
- */
 
 export default function reducer(state={
     // data: {},
@@ -11,11 +8,25 @@ export default function reducer(state={
     // fetching: false,
     // fetched: false,
     // error: null,
-    loggedIn: false
+    loggedIn: false,
+    signUp: false,
+    email: '',
 }, action) {
     switch (action.type) {
         case "LOGIN_SUCCESS": {
-            return {...state, loggedIn: true}
+            return {
+                ...state,
+                fetching: false,
+                fetched: true,
+                loggedIn: true,
+                email: action.email,
+            }
+        }
+        case "START_SIGNUP": {
+            return {...state, signUp: true}
+        }
+        case "FINISH_SIGNUP": {
+            return {...state, signUp: false}
         }
     }
     return state

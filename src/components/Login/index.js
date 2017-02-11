@@ -12,6 +12,7 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import { login, startSignUp } from "../../actions/loginActions";
+import { listAll } from "../../actions/listActions"
 const FormItem = Form.Item;
 
 import SignUp from "../SignUp";
@@ -67,6 +68,9 @@ export default class Login extends React.Component {
         });
     }
 
+    componentDidMount() {
+        this.props.dispatch(listAll());
+    }
     render() {
         const LOGIN_BASE_STYLE = {
             position: 'absolute',

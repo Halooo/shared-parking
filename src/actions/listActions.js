@@ -14,7 +14,7 @@ export function listAll () {
             url: '/list',
             method: 'get',
         }).then((res) => {
-            dispatch({type: "LIST_ALL_SUCCESS", payload: res})
+            dispatch({type: "LIST_ALL_SUCCESS", payload: res.data})
         }).catch((err) => {
             message.error('Failed to Load List', 5);
             dispatch({type: "LIST_ALL_FAILED", payload: err})

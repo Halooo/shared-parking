@@ -9,57 +9,41 @@ import { connect } from "react-redux";
 import { Breadcrumb, Table, Input, Button } from "antd";
 import FlatButton from "material-ui/FlatButton";
 
+
 @connect((store) => {
     return {
+        store,
+        data: store.list.data,
         stepData: store.steps,
-        data : [{
-            key: '1',
-            time: '201702051830',
-            fare: 3,
-            location: 'New York No. 1 Lake Park',
-        }, {
-            key: '2',
-            time: '201702051830',
-            fare: 4,
-            location: 'London No. 1 Lake Park',
-        }, {
-            key: '3',
-            time: '201702051830',
-            fare: 1,
-            location: 'Sidney No. 1 Lake Park',
-        }, {
-            key: '4',
-            time: '201702051830',
-            fare: 2,
-            location: 'London No. 2 Lake Park',
-        }]
+        // data : [{
+        //     key: '1',
+        //     time: '201702051830',
+        //     fare: 3,
+        //     location: 'New York No. 1 Lake Park',
+        // }, {
+        //     key: '2',
+        //     time: '201702051830',
+        //     fare: 4,
+        //     location: 'London No. 1 Lake Park',
+        // }, {
+        //     key: '3',
+        //     time: '201702051830',
+        //     fare: 1,
+        //     location: 'Sidney No. 1 Lake Park',
+        // }, {
+        //     key: '4',
+        //     time: '201702051830',
+        //     fare: 2,
+        //     location: 'London No. 2 Lake Park',
+        // }]
     }
 })
 
 export default class ListPass extends React.Component {
     constructor(props) {
         super(props);
-        const data = [{
-            key: '1',
-            time: '201702051830',
-            fare: 3,
-            location: 'Lot N',
-        }, {
-            key: '2',
-            time: '201702051830',
-            fare: 4,
-            location: 'Lot M',
-        }, {
-            key: '3',
-            time: '201702051830',
-            fare: 1,
-            location: 'Lot P',
-        }, {
-            key: '4',
-            time: '201702051830',
-            fare: 2,
-            location: 'RB Lib',
-        }];
+        let data = [];
+
         this.state = {
             timeFilterDropdownVisible: false,
             locationFilterDropdownVisible: false,
@@ -68,6 +52,28 @@ export default class ListPass extends React.Component {
             searchLocation: '',
         }
     }
+    componentWillMount() {
+        const listData = this.props.store.list.data;
+        let i = 0;
+        for (let item in listData) {
+            let temp = this.state.data;
+            temp.push(listData[item]);
+            temp[i].id = i;
+            let tempDate = temp[i].date;
+            let tempTime = temp[i].time;
+            tempDate = temp[i].date.substring(5,10);
+            tempTime = temp[i].time.substring(11,19);
+            temp[i].time = tempDate + ' ' + tempTime;
+            console.log("temp",tempTime)
+            this.setState({data: temp})
+            i++;
+        }
+
+    }
+    componentDidMount() {
+
+    }
+
     onTimeInputChange(e) {
         this.setState({ searchTime: e.target.value });
     }
@@ -171,6 +177,7 @@ export default class ListPass extends React.Component {
             key: 'fare',
             sorter: (a, b) => a.fare - b.fare
         }];
+
         return (
             <div>
                 <Breadcrumb style={{ margin: '12px 0' }}>
@@ -181,5 +188,6 @@ export default class ListPass extends React.Component {
                 <Table columns={columns} dataSource={this.state.data} />
             </div>
         )
+
     }
 }

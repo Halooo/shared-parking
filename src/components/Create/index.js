@@ -14,6 +14,7 @@ import { Form } from "antd";
 const FormItem = Form.Item;
 
 import { createPass } from "../../actions/createAction";
+import { listAll } from "../../actions/listActions"
 
 @connect((store) => {
     return {
@@ -32,6 +33,9 @@ export default class CreatePass extends React.Component {
             location: '',
             sharedFare: '',
         };
+    }
+    componentDidUpdate() {
+        this.props.dispatch(listAll());
     }
     handleDate(e,date) {
         this.setState({defaultDate: date})
@@ -107,9 +111,7 @@ export default class CreatePass extends React.Component {
                         <FormItem >
                             <RaisedButton label="Create" primary={true} onClick={this.handleCreate.bind(this)}  />
                         </FormItem>
-
                     </Form>
-
                 </div>
             </div>
         )

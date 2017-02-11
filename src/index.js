@@ -24,7 +24,7 @@ import App from "./App";
 import store from "./store/configure-store";
 
 const app = document.getElementById('root')
-
+// console.log(2)
 ReactDOM.render(<Provider store={store}>
     <App />
 </Provider>, app);

@@ -10,7 +10,7 @@ const baseURI = env.localdev;
 
 export function login(data) {
     // console.log(id);
-    return function(dispatch) {
+    return function (dispatch) {
         axios({
             baseURL: baseURI,
             url: '/login',
@@ -19,9 +19,8 @@ export function login(data) {
                 data,
             },
         }).then((res) => {
+
             message.success('Login Succeed', 3);
-            console.log('login success!!!!', res);
-            console.log("login success data", JSON.parse(res.config.data));
             const resData =  JSON.parse(res.config.data);
             dispatch({type: "LOGIN_SUCCESS", payload: res, email: resData.data.data.email})
         }).catch((err) => {
@@ -31,6 +30,11 @@ export function login(data) {
     }
 }
 
+export function logout() {
+    return function (dispatch) {
+        dispatch({type: "LOGOUT"})
+    }
+}
 
 export function startSignUp() {
     return function(dispatch) {

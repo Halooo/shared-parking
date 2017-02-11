@@ -1,12 +1,22 @@
 import React from "react";
 import { connect } from "react-redux";
+import cookie from "react-cookie";
 
 import { Layout, Menu, Icon } from "antd";
 const SubMenu = Menu.SubMenu;
 const { Header, Footer, Content} = Layout;
 
+
 import Create from '../Create';
 import List from '../List';
+import Logout from '../Logout';
+
+@connect((store) => {
+    return {
+        store,
+    }
+})
+
 
 export default class Base extends React.Component {
     constructor(props) {
@@ -38,7 +48,7 @@ export default class Base extends React.Component {
         } else if (this.state.currTab == "list") {
             tabContent = <List/>
         } else if (this.state.currTab == "logout") {
-
+            tabContent = <Logout/>
         } else {
             tabContent = <div></div>
         }
@@ -55,7 +65,7 @@ export default class Base extends React.Component {
             >
                 <Menu.Item key="create" >List A Pass</Menu.Item>
                 <Menu.Item key="list" >Find A Pass</Menu.Item>
-                <Menu.Item key="account" style={{float: 'right'}}><Icon type="logout" />Logout</Menu.Item>
+                <Menu.Item key="logout" style={{float: 'right'}}><Icon type="logout" />Logout</Menu.Item>
             </Menu>
         } else {
             responsiveMenu = <Menu

@@ -14,7 +14,7 @@ import { Form } from "antd";
 const FormItem = Form.Item;
 
 import { createPass } from "../../actions/createAction";
-import { listAll } from "../../actions/listActions"
+import { listAll } from "../../actions/listActions";
 
 @connect((store) => {
     return {
@@ -26,22 +26,21 @@ import { listAll } from "../../actions/listActions"
 export default class CreatePass extends React.Component {
     constructor(props) {
         super(props);
-        let date = new Date();
         this.state = {
-            defaultDate: date,
+            defaultDate: {},
             time: null,
             location: '',
             sharedFare: '',
         };
     }
-    componentDidUpdate() {
+    componentWillUnmount() {
         this.props.dispatch(listAll());
     }
     handleDate(e,date) {
-        this.setState({defaultDate: date})
+        this.setState({defaultDate: date.toString()})
     }
     handleTime(e,time) {
-        this.setState({time: time})
+        this.setState({time: time.toString()})
     }
     handleLocationChange(e) {
         this.setState({
@@ -85,7 +84,6 @@ export default class CreatePass extends React.Component {
                             <DatePicker
                                 onChange={this.handleDate.bind(this)}
                                 hintText="Pick Date"
-                                defaultDate={this.state.defaultDate}
                             />
                         </FormItem>
                         <FormItem>

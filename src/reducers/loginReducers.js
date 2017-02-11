@@ -28,6 +28,9 @@ export default function reducer(state={
         case "FINISH_SIGNUP": {
             return {...state, signUp: false}
         }
+        case "LOGOUT": {
+            return {...state, loggedIn: false}
+        }
     }
     return state
 }

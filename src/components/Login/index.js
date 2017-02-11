@@ -7,12 +7,13 @@
 import React from "react";
 import { connect } from "react-redux";
 
+import cookie from "react-cookie";
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import { login, startSignUp } from "../../actions/loginActions";
-import { listAll } from "../../actions/listActions"
+import { listAll } from "../../actions/listActions";
 const FormItem = Form.Item;
 
 import SignUp from "../SignUp";
@@ -50,6 +51,7 @@ export default class Login extends React.Component {
                 pw: this.state.pw
             }
         }));
+        cookie.save('userId', this.state.email)
     }
     signUp() {
         this.setState({signUp: true});

@@ -6,9 +6,9 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { Breadcrumb, Table, Input, Button } from "antd";
+import { Breadcrumb, Table, Input, Button, Icon } from "antd";
 import FlatButton from "material-ui/FlatButton";
-
+import { listAll } from "../../actions/listActions";
 
 @connect((store) => {
     return {
@@ -42,12 +42,10 @@ import FlatButton from "material-ui/FlatButton";
 export default class ListPass extends React.Component {
     constructor(props) {
         super(props);
-        let data = [];
-
         this.state = {
             timeFilterDropdownVisible: false,
             locationFilterDropdownVisible: false,
-            data,
+            data: [],
             searchTime: '',
             searchLocation: '',
         }
@@ -57,21 +55,39 @@ export default class ListPass extends React.Component {
         let i = 0;
         for (let item in listData) {
             let temp = this.state.data;
+            console.log('data type1:', this.state.data)
             temp.push(listData[item]);
+            console.log('data type2:', this.state.data)
             temp[i].id = i;
             let tempDate = temp[i].date;
             let tempTime = temp[i].time;
-            tempDate = temp[i].date.substring(5,10);
-            tempTime = temp[i].time.substring(11,19);
-            temp[i].time = tempDate + ' ' + tempTime;
-            console.log("temp",tempTime)
-            this.setState({data: temp})
+            tempDate = temp[i].date.substring(4,11);
+            tempTime = temp[i].time.substring(16,21);
+            temp[i].time = tempDate + ' - ' + tempTime;
+
+            this.setState({data: temp});
             i++;
         }
 
     }
-    componentDidMount() {
+    reload() {
+        this.props.dispatch(listAll());
+        this.state.data = [];
+        const listData = this.props.store.list.data;
+        let i = 0;
+        for (let item in listData) {
+            let temp = this.state.data;
+            temp.push(listData[item]);
+            temp[i].id = i;
+            let tempDate = temp[i].date;
+            let tempTime = temp[i].time;
+            tempDate = temp[i].date.substring(4,11);
+            tempTime = temp[i].time.substring(16,21);
+            temp[i].time = tempDate + ' - ' + tempTime;
 
+            this.setState({data: temp});
+            i++;
+        }
     }
 
     onTimeInputChange(e) {
@@ -128,13 +144,6 @@ export default class ListPass extends React.Component {
             }).filter(record => !!record),
         });
     }
-    clearSearch() {
-        this.setState({
-            searchTime: '',
-            searchLocation: '',
-            data: this.props.data,
-        })
-    }
     render() {
         const columns = [{
             title: 'Date',
@@ -178,13 +187,23 @@ export default class ListPass extends React.Component {
             sorter: (a, b) => a.fare - b.fare
         }];
 
+
         return (
             <div>
                 <Breadcrumb style={{ margin: '12px 0' }}>
                     <Breadcrumb.Item>My Lists</Breadcrumb.Item>
                     <Breadcrumb.Item>All Lists</Breadcrumb.Item>
                 </Breadcrumb>
-                <FlatButton label="Clear Search Options" primary={true} onClick={this.clearSearch.bind(this)}  />
+
+                <div>
+                    <Icon style={{fontSize: '14px', color: 'rgb(0, 188, 212)'}} type="reload" onClick={this.reload.bind(this)} />
+                    <FlatButton
+                        style={{backgroundColor: 'rgba(0, 0, 0, 0)'}}
+                        label="Clear Search Options and Reload"
+                        primary={true}
+                        onClick={this.reload.bind(this)}
+                    />
+                </div>
                 <Table columns={columns} dataSource={this.state.data} />
             </div>
         )

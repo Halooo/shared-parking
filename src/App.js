@@ -1,7 +1,8 @@
 /**
  * Created by haos on 26/01/2017.
  */
-import React from "react"
+import React from "react";
+import cookie from "react-cookie";
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import 'antd/dist/antd.css';
 
@@ -18,12 +19,14 @@ import { connect } from "react-redux";
 })
 
 export default class App extends React.Component {
+    componentWillMount() {
+        this.state = {userId:cookie.load('userId')}
+    }
     render() {
-        console.log(1)
+        console.log('cookies', this.state.userId , this.props.loggedIn)
         return (
             <MuiThemeProvider>
-                {this.props.loggedIn ? <Layout/> : <Login/>}
-                {/*<Layout/>*/}
+                {this.state.userId || this.props.loggedIn ? <Layout/> : <Login/>}
             </MuiThemeProvider>
         )
     }

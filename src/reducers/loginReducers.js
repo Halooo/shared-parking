@@ -11,6 +11,7 @@ export default function reducer(state={
     loggedIn: false,
     signUp: false,
     email: '',
+    uInfo: null,
 }, action) {
     switch (action.type) {
         case "LOGIN_SUCCESS": {
@@ -20,6 +21,7 @@ export default function reducer(state={
                 fetched: true,
                 loggedIn: true,
                 email: action.email,
+                uInfo: action.payload,
             }
         }
         case "START_SIGNUP": {

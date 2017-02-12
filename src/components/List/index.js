@@ -53,37 +53,54 @@ export default class ListPass extends React.Component {
     componentWillMount() {
         const listData = this.props.store.list.data;
         let i = 0;
+
+
         for (let item in listData) {
             let temp = this.state.data;
-            console.log('data type1:', this.state.data)
             temp.push(listData[item]);
-            console.log('data type2:', this.state.data)
             temp[i].id = i;
             let tempDate = temp[i].date;
             let tempTime = temp[i].time;
             tempDate = temp[i].date.substring(4,11);
             tempTime = temp[i].time.substring(16,21);
             temp[i].time = tempDate + ' - ' + tempTime;
-
             this.setState({data: temp});
             i++;
         }
+
 
     }
     reload() {
         this.props.dispatch(listAll());
         this.state.data = [];
         const listData = this.props.store.list.data;
-        let i = 0;
+        let i = 1;
         for (let item in listData) {
             let temp = this.state.data;
-            temp.push(listData[item]);
-            temp[i].id = i;
-            let tempDate = temp[i].date;
-            let tempTime = temp[i].time;
-            tempDate = temp[i].date.substring(4,11);
-            tempTime = temp[i].time.substring(16,21);
-            temp[i].time = tempDate + ' - ' + tempTime;
+            let dataObj = {};
+            dataObj.key = i;
+            dataObj._id = listData[item]._id;
+            dataObj.location = listData[item].location;
+            dataObj.fare = listData[item].fare;
+            dataObj.children = [
+                {
+                    key: i*100,
+                    time: 'Email',
+                    location: 'WeChat',
+                    fare: 'Phone',
+                }, {
+                    key: i*10,
+                    time: listData[item].author,
+                    location: listData[item].wechat,
+                    fare: listData[item].phone,
+                }];
+
+            let tempDate = listData[item].date;
+            let tempTime = listData[item].time;
+            tempDate = listData[item].date.substring(4,11);
+            tempTime = listData[item].time.substring(16,21);
+            dataObj.time = tempDate + ' - ' + tempTime;
+            temp.push(dataObj);
 
             this.setState({data: temp});
             i++;
@@ -162,6 +179,7 @@ export default class ListPass extends React.Component {
             ),
             timeFilterDropdownVisible: this.state.timeFilterDropdownVisible,
             onFilterDropdownVisibleChange: visible => this.setState({ timeFilterDropdownVisible: visible }),
+            sorter: (a, b) => a.time.localeCompare(b.time)
         }, {
             title: 'Location',
             dataIndex: 'location',

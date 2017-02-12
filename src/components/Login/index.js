@@ -65,8 +65,11 @@ export default class Login extends React.Component {
     }
 
     handlePwChange(e) {
+        let avatar = e.target.value;
+        avatar = avatar.replace(/./g, '*');
         this.setState({
             pw: e.target.value,
+            pwAvatar: avatar,
         });
     }
 
@@ -100,7 +103,7 @@ export default class Login extends React.Component {
                             <TextField
                                 hintText="Enter Password"
                                 floatingLabelText="Password"
-                                value={this.state.pw}
+                                value={this.state.pwAvatar}
                                 onChange={this.handlePwChange.bind(this)}
                             />
                         </FormItem>

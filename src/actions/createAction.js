@@ -18,17 +18,10 @@ export function createPass(data) {
             },
         }).then((res) => {
             message.success('Created', 3);
-            dispatch({type: "LOGIN_SUCCESS", payload: res})
+            dispatch({type: "CREATE_SUCCESS", payload: res})
         }).catch((err) => {
-            message.error('Failed to Create', 8);
-            dispatch({type: "LOGIN_FAILED", payload: err})
+            message.error('Failed to Create', 6);
+            dispatch({type: "CREATE_FAILED", payload: err})
         });
-        if (data) {
-            dispatch({type: "CREATE_SUCCESS"})
-        }
-        else {
-            message.error('Login Failed', 8)
-        }
-
     }
 }

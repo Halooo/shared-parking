@@ -19,10 +19,10 @@ export function login(data) {
                 data,
             },
         }).then((res) => {
-
+            console.log('login res', res)
             message.success('Login Succeed', 3);
             const resData =  JSON.parse(res.config.data);
-            dispatch({type: "LOGIN_SUCCESS", payload: res, email: resData.data.data.email})
+            dispatch({type: "LOGIN_SUCCESS", payload: res.data[0], email: resData.data.data.email})
         }).catch((err) => {
             message.error('Login Failed', 8);
             dispatch({type: "LOGIN_FAILED", payload: err})

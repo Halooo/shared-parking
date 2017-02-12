@@ -27,10 +27,11 @@ export default class CreatePass extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            defaultDate: {},
+            defaultDate: '',
             time: null,
             location: '',
             sharedFare: '',
+            contact: null,
         };
     }
     componentWillUnmount() {
@@ -55,6 +56,15 @@ export default class CreatePass extends React.Component {
     }
 
     handleCreate(e) {
+        const uinfo = this.props.store.login.uInfo;
+        name = uinfo.first + ', ' + uinfo.last;
+        const contact = {
+            email: uinfo.email,
+            fb: uinfo.fb,
+            name: name,
+            phone: uinfo.phone,
+            wechat: uinfo.wechat,
+        }
         this.props.dispatch(createPass({
             data: {
                 date: this.state.defaultDate,
@@ -62,6 +72,7 @@ export default class CreatePass extends React.Component {
                 location: this.state.location,
                 sharedFare: this.state.sharedFare,
                 email: this.props.store.login.email,
+                contact: contact,
             }
         }));
     }

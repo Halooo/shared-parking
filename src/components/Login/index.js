@@ -76,6 +76,7 @@ export default class Login extends React.Component {
     componentDidMount() {
         this.props.dispatch(listAll());
     }
+
     render() {
         const LOGIN_BASE_STYLE = {
             position: 'absolute',

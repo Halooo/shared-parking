@@ -1,6 +1,6 @@
 /**
  * @author Hao
- * @date 2017-02-04
+ * @date 2017-02-11
  * @fileoverview
  */
 import React from "react";
@@ -26,112 +26,62 @@ export default class ListPass extends React.Component {
             timeFilterDropdownVisible: false,
             locationFilterDropdownVisible: false,
             data: [],
-            myData:[],
             searchTime: '',
             searchLocation: '',
-            listall: true,
         }
     }
     componentWillMount() {
         const user = cookie.load('userId');
-        let date = new Date();
-        let timeStamp = date.getTime();
+
         this.props.dispatch(listAll());
         this.state.data = [];
-        this.state.myData = [];
         const listData = this.props.store.list.data;
         let i = 1;
         for (let item in listData) {
             let temp = this.state.data;
-            let myTemp = this.state.myData;
-
             let dataObj = {};
             dataObj.key = i;
             dataObj._id = listData[item]._id;
             dataObj.location = listData[item].location;
             dataObj.fare = listData[item].fare;
-            dataObj.children = [
-                {
-                    key: timeStamp/1000+i,
-                    time: 'Email',
-                    location: 'WeChat',
-                    fare: 'Phone',
-                }, {
-                    key: timeStamp/10000+i,
-                    time: listData[item].author,
-                    location: listData[item].wechat,
-                    fare: listData[item].phone,
-                }
-            ];
+            dataObj.email = listData[item].author;
             let tempDate = listData[item].date;
             let tempTime = listData[item].time;
             tempDate = listData[item].date.substring(4,11);
             tempTime = listData[item].time.substring(16,21);
             dataObj.time = tempDate + ' - ' + tempTime;
-            temp.push(dataObj);
-            if (dataObj.children[1].time == user) {
-                myTemp.push(dataObj);
+            if (dataObj.email == user) {
+                temp.push(dataObj);
             }
             this.setState({data: temp});
-            this.setState({myData: myTemp});
             i++;
         }
-        let myTemp = this.state.myData;
-        myTemp.map((item) => {
-            delete item['children'];
-        });
-        this.setState({myData: myTemp});
     }
     reload() {
         const user = cookie.load('userId');
-        let date = new Date();
-        let timeStamp = date.getTime();
         this.props.dispatch(listAll());
         this.state.data = [];
-        this.state.myData = [];
         const listData = this.props.store.list.data;
         let i = 1;
         for (let item in listData) {
             let temp = this.state.data;
-            let myTemp = this.state.myData;
-
             let dataObj = {};
             dataObj.key = i;
             dataObj._id = listData[item]._id;
             dataObj.location = listData[item].location;
             dataObj.fare = listData[item].fare;
-            dataObj.children = [
-                {
-                    key: timeStamp/1000+i,
-                    time: 'Email',
-                    location: 'WeChat',
-                    fare: 'Phone',
-                }, {
-                    key: timeStamp/10000+i,
-                    time: listData[item].author,
-                    location: listData[item].wechat,
-                    fare: listData[item].phone,
-                }
-            ];
+            dataObj.email = listData[item].author;
             let tempDate = listData[item].date;
             let tempTime = listData[item].time;
             tempDate = listData[item].date.substring(4,11);
             tempTime = listData[item].time.substring(16,21);
             dataObj.time = tempDate + ' - ' + tempTime;
-            temp.push(dataObj);
-            if (dataObj.children[1].time == user) {
-                myTemp.push(dataObj);
+            if (dataObj.email == user) {
+                temp.push(dataObj);
             }
             this.setState({data: temp});
-            this.setState({myData: myTemp});
             i++;
         }
-        let myTemp = this.state.myData;
-        myTemp.map((item) => {
-            delete item['children'];
-            item.fare = <Icon style={{color: "red"}} type="close" />;
-        });
-        this.setState({myData: myTemp});
     }
 
     onTimeInputChange(e) {
@@ -188,22 +138,7 @@ export default class ListPass extends React.Component {
             }).filter(record => !!record),
         });
     }
-    mylists() {
-        this.setState({listall: false})
-    }
-    alllists() {
-        this.setState({listall: true})
-    }
     render() {
-        let fareColTitle, sorterfn;
-        if (this.state.listall) {
-            fareColTitle = 'Fare';
-            sorterfn = function(a, b) {a.fare - b.fare};
-        } else {
-            fareColTitle = 'Delete';
-            sorterfn = null;
-        }
-
         const columns = [{
             title: 'Date',
             dataIndex: 'time',
@@ -241,18 +176,12 @@ export default class ListPass extends React.Component {
             onFilterDropdownVisibleChange: visible => this.setState({ locationFilterDropdownVisible: visible }),
 
         }, {
-            title: fareColTitle,
+            title: 'Fare',
             dataIndex: 'fare',
             key: 'fare',
-            sorter: sorterfn
+            sorter: (a, b) => a.fare - b.fare
         }];
 
-        let listOpt;
-        if (this.state.listall) {
-            listOpt = <Table columns={columns} dataSource={this.state.data} />;
-        } else {
-            listOpt = <Table columns={columns} dataSource={this.state.myData} />;
-        }
 
         return (
             <div>
@@ -260,7 +189,6 @@ export default class ListPass extends React.Component {
                     <Breadcrumb.Item><a onClick={this.mylists.bind(this)}>My Lists</a></Breadcrumb.Item>
                     <Breadcrumb.Item><a onClick={this.alllists.bind(this)}>All Lists</a></Breadcrumb.Item>
                 </Breadcrumb>
-
                 <div>
                     <Icon style={{fontSize: '14px', color: 'rgb(0, 188, 212)'}} type="reload" onClick={this.reload.bind(this)} />
                     <FlatButton
@@ -270,7 +198,7 @@ export default class ListPass extends React.Component {
                         onClick={this.reload.bind(this)}
                     />
                 </div>
-                {listOpt}
+                <Table columns={columns} dataSource={this.state.data} />
             </div>
         )
 

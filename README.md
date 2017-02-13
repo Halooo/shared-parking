@@ -6,6 +6,8 @@ Share your parking pass with others!
  
 GPL
 
+# File Structure
+```
 .
 └── shared-parking
     ├── README.md
@@ -82,3 +84,4 @@ GPL
     │   └── store
     │       └── configure-store.js
     └── yarn.lock
+```

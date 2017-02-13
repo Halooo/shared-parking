@@ -5,7 +5,7 @@
 import { message } from "antd";
 import axios from "axios";
 import env from '../envConfigure'
-const baseURI = env.localdev;
+const baseURI = env.production;
 
 
 export function login(data) {

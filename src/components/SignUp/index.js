@@ -95,7 +95,7 @@ export default class CreatePass extends React.Component {
     render() {
         const BASE_STYLE = {
             position: 'relative',
-            background: '#f2f2f2'
+            background: '#fff'
         };
         if (this.props.store.signup.signedUp) {
             this.props.dispatch(finishSignUp());
@@ -103,8 +103,8 @@ export default class CreatePass extends React.Component {
         return (
             <div style={{maxWidth: '400px'}}>
                 <div style={BASE_STYLE}>
-                    <h1 style={{textAlign: 'left', fontWeight: '200'}}>Sign Up</h1>
-                    <Form style={{paddingTop: '20px'}}>
+                    <h1 style={{textAlign: 'left', fontWeight: '200', paddingLeft: '10px'}}>Sign Up</h1>
+                    <Form style={{padding: '20px'}}>
                         <FormItem>
                             {this.state.first ? <TextField
                                     hintText='"Tom"'

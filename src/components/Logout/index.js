@@ -24,9 +24,10 @@ export default class Logout extends React.Component {
 
 
     render() {
+
         return (
-            <div >
-                <h1>Successfully Logged Out!</h1>
+            <div style={{margin: 'auto'}}>
+                <h1 style={{textAlign: 'center', marginTop: '50%'}}>Successfully Logged Out!</h1>
             </div>
         )
     }

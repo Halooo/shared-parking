@@ -78,7 +78,7 @@ export default class Base extends React.Component {
             >
                 <Menu.Item key="create" >List Pass</Menu.Item>
                 <Menu.Item key="list" >Find Pass</Menu.Item>
-                <Menu.Item key="account" style={{float: 'right'}}><Icon type="logout" />Logout</Menu.Item>
+                <Menu.Item key="logout" style={{float: 'right'}}><Icon type="logout" />Logout</Menu.Item>
             </Menu>
         }
         return (
@@ -87,7 +87,7 @@ export default class Base extends React.Component {
                     {responsiveMenu}
                 </Header>
                 <Content style={{ margin: '0 0 auto 0', padding: '0px', flex: 'none'}}>
-                    {tabContent}
+                    <div style={{padding: '10px'}}>{tabContent}</div>
                 </Content>
                 <Footer style={{ textAlign: 'center', color: '#ddd' }}>
                     Parking Share ©2016 Created by Hao Sun

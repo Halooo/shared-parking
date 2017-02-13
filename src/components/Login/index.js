@@ -108,7 +108,7 @@ export default class Login extends React.Component {
                                 onChange={this.handlePwChange.bind(this)}
                             />
                         </FormItem>
-                        <FormItem>
+                        <FormItem style={{float: 'right'}}>
                             <FlatButton label="Sign Up" onClick={this.signUp.bind(this)}/>
                             <RaisedButton label="Login" primary={true} onClick={this.handleLogin.bind(this)} />
                         </FormItem>

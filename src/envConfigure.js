@@ -6,5 +6,5 @@ export default {
     localtest: '',
     test: '',
     'pre-production': '',
-    production: ''
+    production: 'https://share-parking.herokuapp.com/'
 }

@@ -9,7 +9,7 @@ import cookie from "react-cookie";
 
 import { Breadcrumb, Table, Input, Button, Icon } from "antd";
 import FlatButton from "material-ui/FlatButton";
-import { listAll } from "../../actions/listActions";
+import { listAll, deleteListing } from "../../actions/listActions";
 
 @connect((store) => {
     return {
@@ -33,54 +33,57 @@ export default class ListPass extends React.Component {
         }
     }
     componentWillMount() {
-        const user = cookie.load('userId');
-        let date = new Date();
-        let timeStamp = date.getTime();
-        this.props.dispatch(listAll());
-        this.state.data = [];
-        this.state.myData = [];
-        const listData = this.props.store.list.data;
-        let i = 1;
-        for (let item in listData) {
-            let temp = this.state.data;
-            let myTemp = this.state.myData;
-
-            let dataObj = {};
-            dataObj.key = i;
-            dataObj._id = listData[item]._id;
-            dataObj.location = listData[item].location;
-            dataObj.fare = listData[item].fare;
-            dataObj.children = [
-                {
-                    key: timeStamp/1000+i,
-                    time: 'Email',
-                    location: 'WeChat',
-                    fare: 'Phone',
-                }, {
-                    key: timeStamp/10000+i,
-                    time: listData[item].author,
-                    location: listData[item].wechat,
-                    fare: listData[item].phone,
-                }
-            ];
-            let tempDate = listData[item].date;
-            let tempTime = listData[item].time;
-            tempDate = listData[item].date.substring(4,11);
-            tempTime = listData[item].time.substring(16,21);
-            dataObj.time = tempDate + ' - ' + tempTime;
-            temp.push(dataObj);
-            if (dataObj.children[1].time == user) {
-                myTemp.push(dataObj);
-            }
-            this.setState({data: temp});
-            this.setState({myData: myTemp});
-            i++;
-        }
-        let myTemp = this.state.myData;
-        myTemp.map((item) => {
-            delete item['children'];
-        });
-        this.setState({myData: myTemp});
+        this.reload();
+        this.reload();
+        // const user = cookie.load('userId');
+        // let date = new Date();
+        // let timeStamp = date.getTime();
+        // this.props.dispatch(listAll());
+        // this.state.data = [];
+        // this.state.myData = [];
+        // const listData = this.props.store.list.data;
+        // let i = 1;
+        // for (let item in listData) {
+        //     let temp = this.state.data;
+        //     let myTemp = this.state.myData;
+        //
+        //     let dataObj = {};
+        //     dataObj.key = i;
+        //     dataObj._id = listData[item]._id;
+        //     dataObj.location = listData[item].location;
+        //     dataObj.fare = listData[item].fare;
+        //     dataObj.children = [
+        //         {
+        //             key: timeStamp/10+i,
+        //             time: 'Email',
+        //             location: 'WeChat',
+        //             fare: 'Phone',
+        //         }, {
+        //             key: timeStamp+i,
+        //             time: listData[item].author,
+        //             location: listData[item].wechat,
+        //             fare: listData[item].phone,
+        //         }
+        //     ];
+        //     let tempDate = listData[item].date;
+        //     let tempTime = listData[item].time;
+        //     tempDate = listData[item].date.substring(4,11);
+        //     tempTime = listData[item].time.substring(16,21);
+        //     dataObj.time = tempDate + ' - ' + tempTime;
+        //     temp.push(dataObj);
+        //     if (dataObj.children[1].time == user) {
+        //         myTemp.push(dataObj);
+        //     }
+        //     this.setState({data: temp});
+        //     this.setState({myData: myTemp});
+        //     i++;
+        // }
+        // let myTemp = this.state.myData;
+        // myTemp.map((item) => {
+        //     delete item['children'];
+        //     item.fare = 'x';
+        // });
+        // this.setState({myData: myTemp});
     }
     reload() {
         const user = cookie.load('userId');
@@ -113,6 +116,7 @@ export default class ListPass extends React.Component {
                     fare: listData[item].phone,
                 }
             ];
+            console.log(dataObj.children)
             let tempDate = listData[item].date;
             let tempTime = listData[item].time;
             tempDate = listData[item].date.substring(4,11);
@@ -129,9 +133,22 @@ export default class ListPass extends React.Component {
         let myTemp = this.state.myData;
         myTemp.map((item) => {
             delete item['children'];
-            item.fare = <Icon style={{color: "red"}} type="close" />;
         });
         this.setState({myData: myTemp});
+    }
+
+    deleteList(event) {
+        let DelDataSource = this.state.myData;
+        const dataToDel = DelDataSource[event.target.getAttribute('data-index')];
+        console.log('delete!!!!!',dataToDel, DelDataSource,event.target.getAttribute('data-index'));
+        this.props.dispatch(deleteListing(dataToDel._id));
+
+        DelDataSource.splice(event.target.getAttribute('data-index'), 1);
+        this.reload();
+        this.reload();
+        this.setState({
+            myData: DelDataSource,
+        });
     }
 
     onTimeInputChange(e) {
@@ -195,13 +212,17 @@ export default class ListPass extends React.Component {
         this.setState({listall: true})
     }
     render() {
-        let fareColTitle, sorterfn;
+        let fareColTitle, sorterfn, renderfn;
         if (this.state.listall) {
             fareColTitle = 'Fare';
             sorterfn = function(a, b) {a.fare - b.fare};
+            renderfn = null;
         } else {
             fareColTitle = 'Delete';
             sorterfn = null;
+            renderfn = (text, record, index) => {
+                return <Icon type="delete" data-index={index} onClick={this.deleteList.bind(this)} />;
+            }
         }
 
         const columns = [{
@@ -221,7 +242,14 @@ export default class ListPass extends React.Component {
             ),
             timeFilterDropdownVisible: this.state.timeFilterDropdownVisible,
             onFilterDropdownVisibleChange: visible => this.setState({ timeFilterDropdownVisible: visible }),
-            sorter: (a, b) => a.time.localeCompare(b.time)
+            sorter: (a, b) => {
+                if (typeof a.time == 'string') {
+                    return a.time.localeCompare(b.time)
+                }
+                else {
+                    return true;
+                }
+            }
         }, {
             title: 'Location',
             dataIndex: 'location',
@@ -244,14 +272,19 @@ export default class ListPass extends React.Component {
             title: fareColTitle,
             dataIndex: 'fare',
             key: 'fare',
-            sorter: sorterfn
+            sorter: (a,b) => a.fare - b.fare,
+            render: renderfn
         }];
 
+        // console.log(this.state.data, this.state.myData);
+        const tableLocale = {
+            emptyText: 'Click reload above to fetch data',
+        }
         let listOpt;
         if (this.state.listall) {
-            listOpt = <Table columns={columns} dataSource={this.state.data} />;
+            listOpt = <Table locale={tableLocale} columns={columns} dataSource={this.state.data} />;
         } else {
-            listOpt = <Table columns={columns} dataSource={this.state.myData} />;
+            listOpt = <Table locale={tableLocale} columns={columns} dataSource={this.state.myData} />;
         }
 
         return (
@@ -262,10 +295,12 @@ export default class ListPass extends React.Component {
                 </Breadcrumb>
 
                 <div>
-                    <Icon style={{fontSize: '14px', color: 'rgb(0, 188, 212)'}} type="reload" onClick={this.reload.bind(this)} />
+                    <Icon style={{fontSize: '14px', color: 'rgb(0, 188, 212)'}}
+                          type="reload"
+                          onClick={this.reload.bind(this)} />
                     <FlatButton
                         style={{backgroundColor: 'rgba(0, 0, 0, 0)'}}
-                        label="Clear Search Options and Reload"
+                        label="Clear Search and Reload"
                         primary={true}
                         onClick={this.reload.bind(this)}
                     />

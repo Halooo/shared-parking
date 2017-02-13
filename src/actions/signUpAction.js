@@ -4,7 +4,7 @@
 import { message } from 'antd';
 import axios from 'axios';
 import env from '../envConfigure'
-const baseURI = env.localdev;
+const baseURI = env.production;
 
 function validation(data) {
     const emailValidation = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
